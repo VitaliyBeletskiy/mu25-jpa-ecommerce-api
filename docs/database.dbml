@@ -1,0 +1,64 @@
+Project ecommerce_minimal {
+  database_type: "MySQL"
+  Note: "Minimal clean e-commerce model with proper relations"
+}
+
+Table customer {
+  id int [pk, increment]
+  email varchar(255) [not null, unique]
+  full_name varchar(255) [not null]
+  created_at datetime [not null]
+
+  Note: "Represents a registered user placing orders"
+}
+
+Table product {
+  id int [pk, increment]
+  name varchar(255) [not null, unique]
+  price decimal(10,2) [not null]
+  created_at datetime [not null]
+
+  Note: "Sellable product with current price"
+}
+
+Table order {
+  id int [pk, increment]
+  customer_id int [not null]
+  status varchar(20) [not null, note: "NEW | PAID | CANCELED"]
+  created_at datetime [not null]
+
+  Indexes {
+    customer_id
+  }
+
+  Note: "Purchase container created by customer"
+}
+
+Table order_item {
+  order_id int [not null]
+  product_id int [not null]
+  quantity int [not null]
+  unit_price decimal(10,2) [not null, note: "Snapshot of product price at purchase"]
+
+  Indexes {
+    (order_id, product_id) [pk]
+  }
+
+  Note: "Join table Order ↔ Product with additional attributes"
+}
+
+Table payment {
+  order_id int [pk]
+  amount decimal(10,2) [not null]
+  method varchar(20) [not null, note: "CARD | SWISH"]
+  paid_at datetime [not null]
+
+  Note: "One-to-one payment for order"
+}
+
+Ref: order.customer_id > customer.id [delete: cascade]
+
+Ref: order_item.order_id > order.id [delete: cascade]
+Ref: order_item.product_id > product.id
+
+Ref: payment.order_id - order.id [delete: cascade]
