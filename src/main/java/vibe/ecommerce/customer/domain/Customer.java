@@ -1,3 +1,5 @@
 package vibe.ecommerce.customer.domain;
 
-public class Customer {}
+import java.time.LocalDateTime;
+
+public record Customer(Integer id, String fullName, String email, LocalDateTime createdAt) {}

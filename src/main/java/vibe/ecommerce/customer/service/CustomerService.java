@@ -1,3 +1,7 @@
 package vibe.ecommerce.customer.service;
 
-public interface CustomerService {}
+import vibe.ecommerce.customer.domain.Customer;
+
+public interface CustomerService {
+  public Customer createCustomer(String fullName, String email);
+}

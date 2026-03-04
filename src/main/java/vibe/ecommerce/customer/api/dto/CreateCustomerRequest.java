@@ -1,3 +1,5 @@
 package vibe.ecommerce.customer.api.dto;
 
-public class CreateCustomerRequest {}
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateCustomerRequest(@NotBlank String fullName, @NotBlank String email) {}
