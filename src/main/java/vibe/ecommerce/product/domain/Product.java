@@ -1,3 +1,6 @@
 package vibe.ecommerce.product.domain;
 
-public class Product {}
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public record Product(Integer id, String name, BigDecimal price, LocalDateTime createdAt) {}

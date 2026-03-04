@@ -1,3 +1,12 @@
 package vibe.ecommerce.product.domain;
 
-public interface ProductRepository {}
+import java.util.List;
+import java.util.Optional;
+
+public interface ProductRepository {
+  Product save(Product product);
+
+  Optional<Product> findById(Integer id);
+
+  List<Product> findAll();
+}

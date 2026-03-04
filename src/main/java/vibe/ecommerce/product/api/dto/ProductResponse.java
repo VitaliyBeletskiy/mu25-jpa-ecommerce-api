@@ -1,3 +1,6 @@
 package vibe.ecommerce.product.api.dto;
 
-public class ProductResponse {}
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public record ProductResponse(Integer id, String name, BigDecimal price, LocalDateTime createdAt) {}

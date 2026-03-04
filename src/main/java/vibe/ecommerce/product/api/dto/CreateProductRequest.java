@@ -1,3 +1,7 @@
 package vibe.ecommerce.product.api.dto;
 
-public class CreateProductRequest {}
+import jakarta.validation.constraints.NotBlank;
+
+import java.math.BigDecimal;
+
+public record CreateProductRequest(@NotBlank String name, BigDecimal price) {}
