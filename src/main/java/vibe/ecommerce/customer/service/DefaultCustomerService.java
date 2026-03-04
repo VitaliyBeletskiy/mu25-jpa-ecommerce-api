@@ -17,4 +17,9 @@ public class DefaultCustomerService implements CustomerService {
   public Customer createCustomer(String fullName, String email) {
     return repo.save(new Customer(null, fullName, email, null));
   }
+
+  @Override
+  public Customer getCustomer(Integer id) {
+    return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+  }
 }

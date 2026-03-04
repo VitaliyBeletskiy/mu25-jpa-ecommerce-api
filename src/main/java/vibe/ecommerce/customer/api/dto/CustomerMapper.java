@@ -4,7 +4,7 @@ import vibe.ecommerce.customer.domain.Customer;
 
 public class CustomerMapper {
 
-  public static CustomerResponse map(Customer customer) {
+  public static CustomerResponse toResponse(Customer customer) {
     return new CustomerResponse(
         customer.id(), customer.fullName(), customer.email(), customer.createdAt());
   }
