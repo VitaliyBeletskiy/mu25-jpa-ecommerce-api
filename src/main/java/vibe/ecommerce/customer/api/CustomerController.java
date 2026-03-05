@@ -12,15 +12,24 @@ import vibe.ecommerce.customer.api.dto.CustomerMapper;
 import vibe.ecommerce.customer.api.dto.CustomerResponse;
 import vibe.ecommerce.customer.domain.Customer;
 import vibe.ecommerce.customer.service.CustomerService;
+import vibe.ecommerce.order.api.dto.OrderMapper;
+import vibe.ecommerce.order.api.dto.OrderResponse;
+import vibe.ecommerce.order.domain.Order;
+import vibe.ecommerce.order.service.OrderService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
 
   private final CustomerService customerService;
+  private final OrderService orderService;
 
-  public CustomerController(final CustomerService customerService) {
+  public CustomerController(
+      final CustomerService customerService, final OrderService orderService) {
     this.customerService = customerService;
+    this.orderService = orderService;
   }
 
   @PostMapping
@@ -33,5 +42,11 @@ public class CustomerController {
   public CustomerResponse getCustomer(@PathVariable Integer id) {
     Customer customer = customerService.getCustomer(id);
     return CustomerMapper.toResponse(customer);
+  }
+
+  @GetMapping("/{customerId}/orders")
+  public List<OrderResponse> getOrdersForCustomer(@PathVariable Integer customerId) {
+    List<Order> orders = orderService.getOrdersForCustomer(customerId);
+    return orders.stream().map(OrderMapper::toOrderResponse).toList();
   }
 }

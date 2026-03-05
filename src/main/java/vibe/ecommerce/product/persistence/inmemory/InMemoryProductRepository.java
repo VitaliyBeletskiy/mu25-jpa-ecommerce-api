@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository;
 import vibe.ecommerce.product.domain.Product;
 import vibe.ecommerce.product.domain.ProductRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class InMemoryProductRepository implements ProductRepository {
   @Override
   public Product save(Product product) {
     currentId++;
-    LocalDateTime now = LocalDateTime.now();
+    Instant now = Instant.now();
     Product toSave = new Product(currentId, product.name(), product.price(), now);
     storage.put(currentId, toSave);
     return toSave;

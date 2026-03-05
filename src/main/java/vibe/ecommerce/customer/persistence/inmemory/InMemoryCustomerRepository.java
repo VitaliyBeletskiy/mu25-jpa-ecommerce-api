@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository;
 import vibe.ecommerce.customer.domain.Customer;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -18,7 +18,7 @@ public class InMemoryCustomerRepository implements CustomerRepository {
   @Override
   public Customer save(final Customer customer) {
     currentId++;
-    LocalDateTime now = LocalDateTime.now();
+    Instant now = Instant.now();
     Customer saved = new Customer(currentId, customer.fullName(), customer.email(), now);
     storage.put(currentId, saved);
     return saved;

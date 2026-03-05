@@ -1,3 +1,5 @@
 package vibe.ecommerce.order.domain;
 
-public class Order {}
+import java.time.Instant;
+
+public record Order(Integer id, Integer customerId, OrderStatus status, Instant createdAt) {}
