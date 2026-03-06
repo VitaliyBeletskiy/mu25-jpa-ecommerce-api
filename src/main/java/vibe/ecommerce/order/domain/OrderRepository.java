@@ -13,5 +13,9 @@ public interface OrderRepository {
 
   OrderItem saveOrderItem(OrderItem orderItem);
 
-  Optional<OrderItem> findOrderItem(Integer orderId, Integer productId);
+  List<OrderItem> findOrderItems(Integer orderId);
+
+  Order savePayment(Payment payment);
+
+//  Optional<Payment> findPaymentByOrderId(Integer orderId);
 }

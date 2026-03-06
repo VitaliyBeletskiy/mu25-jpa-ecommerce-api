@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 import vibe.ecommerce.order.domain.Order;
 import vibe.ecommerce.order.domain.OrderItem;
 import vibe.ecommerce.order.domain.OrderRepository;
+import vibe.ecommerce.order.domain.OrderStatus;
+import vibe.ecommerce.order.domain.Payment;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -20,6 +22,8 @@ public class InMemoryOrderRepository implements OrderRepository {
   private record OrderItemKey(Integer orderId, Integer productId) {}
 
   private final Map<OrderItemKey, OrderItem> orderItems = new HashMap<>();
+
+  private final Map<Integer, Payment> payments = new HashMap<>();
 
   @Override
   public Order save(Order order) {
@@ -48,11 +52,23 @@ public class InMemoryOrderRepository implements OrderRepository {
   }
 
   @Override
-  public Optional<OrderItem> findOrderItem(Integer orderId, Integer productId) {
-    OrderItemKey key = new OrderItemKey(orderId, productId);
-    if (orderItems.containsKey(key)) {
-      return Optional.of(orderItems.get(key));
-    }
-    return Optional.empty();
+  public List<OrderItem> findOrderItems(Integer orderId) {
+    return orderItems.values().stream().filter(oi -> oi.orderId().equals(orderId)).toList();
   }
+
+  @Override
+  public Order savePayment(Payment payment) {
+    Instant now = Instant.now();
+    Payment saved = new Payment(payment.orderId(), payment.amount(), payment.method(), now);
+    payments.put(payment.orderId(), saved);
+    Order order = orders.get(payment.orderId());
+    Order paidOrder = new Order(order.id(), order.customerId(), OrderStatus.PAID, now);
+    orders.put(order.id(), paidOrder);
+    return paidOrder;
+  }
+
+//  @Override
+//  public Optional<Payment> findPaymentByOrderId(Integer orderId) {
+//    return Optional.ofNullable(payments.get(orderId));
+//  }
 }
