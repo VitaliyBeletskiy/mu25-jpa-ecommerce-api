@@ -56,7 +56,7 @@ Relationships:
 ### Order Items
 
 -   `POST   /orders/{orderId}/items`
--   `GET    /orders/{orderId}/items/{productId}`
+-   `GET    /orders/{orderId}/items`
 
 ### Payments
 
