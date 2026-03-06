@@ -1,3 +1,5 @@
 package vibe.ecommerce.order.api.dto;
 
-public class AddOrderItemRequest {}
+import jakarta.validation.constraints.NotNull;
+
+public record AddOrderItemRequest(@NotNull Integer productId, @NotNull Integer quantity) {}

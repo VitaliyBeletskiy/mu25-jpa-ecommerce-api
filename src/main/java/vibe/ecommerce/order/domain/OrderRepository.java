@@ -7,7 +7,11 @@ public interface OrderRepository {
 
   Order save(Order order);
 
-  Optional<Order> findById(Integer id);
+  Optional<Order> findOrderById(Integer id);
 
   List<Order> findByCustomerId(Integer customerId);
+
+  OrderItem saveOrderItem(OrderItem orderItem);
+
+  Optional<OrderItem> findOrderItem(Integer orderId, Integer productId);
 }

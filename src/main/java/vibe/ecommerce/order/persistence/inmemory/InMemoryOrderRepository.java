@@ -2,8 +2,8 @@ package vibe.ecommerce.order.persistence.inmemory;
 
 import org.springframework.stereotype.Repository;
 import vibe.ecommerce.order.domain.Order;
+import vibe.ecommerce.order.domain.OrderItem;
 import vibe.ecommerce.order.domain.OrderRepository;
-import vibe.ecommerce.order.domain.OrderStatus;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -14,27 +14,45 @@ import java.util.Optional;
 @Repository
 public class InMemoryOrderRepository implements OrderRepository {
 
-  private final Map<Integer, Order> storage = new HashMap<>();
-  private int currentId = 0;
+  private final Map<Integer, Order> orders = new HashMap<>();
+  private int currentOrderId = 0;
+
+  private record OrderItemKey(Integer orderId, Integer productId) {}
+
+  private final Map<OrderItemKey, OrderItem> orderItems = new HashMap<>();
 
   @Override
   public Order save(Order order) {
-    currentId++;
+    currentOrderId++;
     Instant now = Instant.now();
-    Order saved = new Order(currentId, order.customerId(), order.status(), now);
-    storage.put(currentId, saved);
+    Order saved = new Order(currentOrderId, order.customerId(), order.status(), now);
+    orders.put(currentOrderId, saved);
     return saved;
   }
 
   @Override
-  public Optional<Order> findById(Integer id) {
-    return Optional.ofNullable(storage.get(id));
+  public Optional<Order> findOrderById(Integer id) {
+    return Optional.ofNullable(orders.get(id));
   }
 
   @Override
   public List<Order> findByCustomerId(Integer customerId) {
-    return storage.values().stream()
-        .filter(order -> order.customerId().equals(customerId))
-        .toList();
+    return orders.values().stream().filter(order -> order.customerId().equals(customerId)).toList();
+  }
+
+  @Override
+  public OrderItem saveOrderItem(OrderItem orderItem) {
+    OrderItemKey key = new OrderItemKey(orderItem.orderId(), orderItem.productId());
+    orderItems.put(key, orderItem);
+    return orderItem;
+  }
+
+  @Override
+  public Optional<OrderItem> findOrderItem(Integer orderId, Integer productId) {
+    OrderItemKey key = new OrderItemKey(orderId, productId);
+    if (orderItems.containsKey(key)) {
+      return Optional.of(orderItems.get(key));
+    }
+    return Optional.empty();
   }
 }
