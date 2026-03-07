@@ -26,9 +26,6 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 
   @Override
   public Optional<Customer> findById(Integer id) {
-    if (storage.containsKey(id)) {
-      return Optional.of(storage.get(id));
-    }
-    return Optional.empty();
+    return Optional.ofNullable(storage.get(id));
   }
 }

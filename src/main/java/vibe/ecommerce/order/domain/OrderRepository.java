@@ -7,7 +7,7 @@ public interface OrderRepository {
 
   Order save(Order order);
 
-  Optional<Order> findOrderById(Integer id);
+  Optional<Order> findById(Integer id);
 
   List<Order> findByCustomerId(Integer customerId);
 
@@ -15,7 +15,7 @@ public interface OrderRepository {
 
   List<OrderItem> findOrderItems(Integer orderId);
 
-  Order savePayment(Payment payment);
+  Payment savePayment(Payment payment);
 
-//  Optional<Payment> findPaymentByOrderId(Integer orderId);
+  Optional<Payment> findPaymentByOrderId(Integer orderId);
 }

@@ -3,6 +3,7 @@ package vibe.ecommerce.order.service;
 import org.springframework.stereotype.Service;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 import vibe.ecommerce.order.domain.Order;
+import vibe.ecommerce.order.domain.OrderDetails;
 import vibe.ecommerce.order.domain.OrderItem;
 import vibe.ecommerce.order.domain.OrderRepository;
 import vibe.ecommerce.order.domain.OrderStatus;
@@ -41,8 +42,19 @@ public class DefaultOrderService implements OrderService {
   @Override
   public Order getOrder(Integer id) {
     return orderRepo
-        .findOrderById(id)
+        .findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+  }
+
+  @Override
+  public OrderDetails getOrderDetails(Integer id) {
+    Order order =
+        orderRepo
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    List<OrderItem> orderItems = orderRepo.findOrderItems(id);
+    Payment payment = orderRepo.findPaymentByOrderId(id).orElse(null);
+    return new OrderDetails(order, orderItems, payment);
   }
 
   @Override
@@ -56,7 +68,7 @@ public class DefaultOrderService implements OrderService {
   @Override
   public OrderItem addOrderItem(Integer orderId, Integer productId, Integer quantity) {
     orderRepo
-        .findOrderById(orderId)
+        .findById(orderId)
         .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     Product product =
         productRepo
@@ -68,28 +80,29 @@ public class DefaultOrderService implements OrderService {
   @Override
   public List<OrderItem> getOrderItems(Integer orderId) {
     orderRepo
-        .findOrderById(orderId)
+        .findById(orderId)
         .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     return orderRepo.findOrderItems(orderId);
   }
 
   @Override
-  public Order payOrder(Integer orderId, BigDecimal amount, PaymentMethod paymentMethod) {
+  public Payment payOrder(Integer orderId, PaymentMethod paymentMethod) {
     Order order =
         orderRepo
-            .findOrderById(orderId)
+            .findById(orderId)
             .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     if (order.status() != OrderStatus.NEW) {
       throw new IllegalStateException("Only NEW orders can be paid");
     }
     List<OrderItem> items = orderRepo.findOrderItems(orderId);
+    if (items.isEmpty()) {
+      throw new IllegalStateException("Cannot pay for order without items");
+    }
     BigDecimal total =
         items.stream()
             .map(oi -> oi.unitPrice().multiply(BigDecimal.valueOf(oi.quantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-    if (amount.compareTo(total) != 0) {
-      throw new IllegalArgumentException("Wrong payment amount");
-    }
-    return orderRepo.savePayment(new Payment(orderId, amount, paymentMethod, null));
+
+    return orderRepo.savePayment(new Payment(orderId, total, paymentMethod, null));
   }
 }

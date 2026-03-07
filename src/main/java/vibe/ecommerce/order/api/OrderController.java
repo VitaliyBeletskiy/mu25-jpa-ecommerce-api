@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vibe.ecommerce.order.api.dto.AddOrderItemRequest;
 import vibe.ecommerce.order.api.dto.CreateOrderRequest;
+import vibe.ecommerce.order.api.dto.OrderDetailsResponse;
 import vibe.ecommerce.order.api.dto.OrderItemResponse;
 import vibe.ecommerce.order.api.dto.OrderMapper;
 import vibe.ecommerce.order.api.dto.OrderResponse;
 import vibe.ecommerce.order.api.dto.PayOrderRequest;
+import vibe.ecommerce.order.api.dto.PaymentResponse;
 import vibe.ecommerce.order.domain.Order;
+import vibe.ecommerce.order.domain.OrderDetails;
 import vibe.ecommerce.order.domain.OrderItem;
+import vibe.ecommerce.order.domain.Payment;
 import vibe.ecommerce.order.service.OrderService;
 
 import java.util.List;
@@ -36,9 +40,9 @@ public class OrderController {
   }
 
   @GetMapping("/{id}")
-  public OrderResponse getOrder(@PathVariable Integer id) {
-    Order order = service.getOrder(id);
-    return OrderMapper.toOrderResponse(order);
+  public OrderDetailsResponse getOrder(@PathVariable Integer id) {
+    OrderDetails orderDetails = service.getOrderDetails(id);
+    return OrderMapper.toOrderDetailsResponse(orderDetails);
   }
 
   @PostMapping("/{orderId}/items")
@@ -55,9 +59,9 @@ public class OrderController {
   }
 
   @PostMapping("/{orderId}/pay")
-  public OrderResponse payOrder(
+  public PaymentResponse payOrder(
       @PathVariable Integer orderId, @RequestBody @Valid PayOrderRequest request) {
-    Order order = service.payOrder(orderId, request.amount(), request.paymentMethod());
-    return OrderMapper.toOrderResponse(order);
+    Payment payment = service.payOrder(orderId, request.paymentMethod());
+    return OrderMapper.toPaymentResponse(payment);
   }
 }

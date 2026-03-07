@@ -1,7 +1,9 @@
 package vibe.ecommerce.order.service;
 
 import vibe.ecommerce.order.domain.Order;
+import vibe.ecommerce.order.domain.OrderDetails;
 import vibe.ecommerce.order.domain.OrderItem;
+import vibe.ecommerce.order.domain.Payment;
 import vibe.ecommerce.order.domain.PaymentMethod;
 
 import java.math.BigDecimal;
@@ -12,11 +14,13 @@ public interface OrderService {
 
   Order getOrder(Integer id);
 
+  OrderDetails getOrderDetails(Integer id);
+
   List<Order> getOrdersForCustomer(Integer customerId);
 
   OrderItem addOrderItem(Integer orderId, Integer productId, Integer quantity);
 
   List<OrderItem> getOrderItems(Integer orderId);
 
-  Order payOrder(Integer orderId, BigDecimal amount, PaymentMethod paymentMethod);
+  Payment payOrder(Integer orderId, PaymentMethod paymentMethod);
 }

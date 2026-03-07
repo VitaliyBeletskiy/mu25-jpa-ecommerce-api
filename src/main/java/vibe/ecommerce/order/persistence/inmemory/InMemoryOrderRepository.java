@@ -35,7 +35,7 @@ public class InMemoryOrderRepository implements OrderRepository {
   }
 
   @Override
-  public Optional<Order> findOrderById(Integer id) {
+  public Optional<Order> findById(Integer id) {
     return Optional.ofNullable(orders.get(id));
   }
 
@@ -57,18 +57,18 @@ public class InMemoryOrderRepository implements OrderRepository {
   }
 
   @Override
-  public Order savePayment(Payment payment) {
+  public Payment savePayment(Payment payment) {
     Instant now = Instant.now();
     Payment saved = new Payment(payment.orderId(), payment.amount(), payment.method(), now);
     payments.put(payment.orderId(), saved);
     Order order = orders.get(payment.orderId());
-    Order paidOrder = new Order(order.id(), order.customerId(), OrderStatus.PAID, now);
+    Order paidOrder = new Order(order.id(), order.customerId(), OrderStatus.PAID, order.createdAt());
     orders.put(order.id(), paidOrder);
-    return paidOrder;
+    return saved;
   }
 
-//  @Override
-//  public Optional<Payment> findPaymentByOrderId(Integer orderId) {
-//    return Optional.ofNullable(payments.get(orderId));
-//  }
+  @Override
+  public Optional<Payment> findPaymentByOrderId(Integer orderId) {
+    return Optional.ofNullable(payments.get(orderId));
+  }
 }

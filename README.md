@@ -37,30 +37,27 @@ Relationships:
 ## API Endpoints
 
 ### Products
-
--   `POST   /products`
+-   `POST   /products`  CreateProductRequest -> ProductResponse
 -   `GET    /products`
 -   `GET    /products/{id}`
 
 ### Customers
-
--   `POST   /customers`
+-   `POST   /customers` CreateCustomerRequest -> CustomerResponse
+-   `GET    /customers`
 -   `GET    /customers/{id}`
 
 ### Orders
-
--   `POST   /orders`
--   `GET    /orders/{id}`
+-   `POST   /orders`  CreateOrderRequest -> OrderResponse
+-   `GET    /orders/{id}` ... -> OrderDetailsResponse
 -   `GET    /customers/{customerId}/orders`
 
 ### Order Items
-
--   `POST   /orders/{orderId}/items`
+-   `POST   /orders/{orderId}/items`   AddOrderItemRequest -> OrderItemResponse
 -   `GET    /orders/{orderId}/items`
+-   `DELETE /orders/{orderId}/items/{productId}`
 
 ### Payments
-
--   `POST   /orders/{orderId}/pay`
+-   `POST   /orders/{orderId}/pay`  PayOrderRequest -> PaymentResponse
 
 ------------------------------------------------------------------------
 
@@ -95,7 +92,6 @@ Example `application.properties`:
 
 ## Development Notes
 
--   Use `ddl-auto=update` during development
--   Use `ddl-auto=validate` for production-style schema validation
+-   Use `ddl-auto=validate`
 -   Spring Profiles can be used to switch between InMemory and JPA
     repositories
