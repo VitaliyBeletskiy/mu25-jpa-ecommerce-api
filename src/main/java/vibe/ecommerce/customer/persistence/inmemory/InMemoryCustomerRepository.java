@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+// @Repository
 public class InMemoryCustomerRepository implements CustomerRepository {
 
   private final Map<Integer, Customer> storage = new HashMap<>();

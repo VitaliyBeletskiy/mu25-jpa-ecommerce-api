@@ -1,6 +1,7 @@
 package vibe.ecommerce.customer.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vibe.ecommerce.customer.domain.Customer;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 
@@ -13,9 +14,10 @@ public class DefaultCustomerService implements CustomerService {
     this.repo = customerRepository;
   }
 
+  @Transactional
   @Override
   public Customer createCustomer(String fullName, String email) {
-    return repo.save(new Customer(null, fullName, email, null));
+    return repo.save(new Customer(fullName, email));
   }
 
   @Override
