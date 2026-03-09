@@ -44,6 +44,12 @@ public class CustomerController {
     return CustomerMapper.toResponse(customer);
   }
 
+  @GetMapping
+  public List<CustomerResponse> getCustomers() {
+    List<Customer> customers = customerService.getCustomers();
+    return customers.stream().map(CustomerMapper::toResponse).toList();
+  }
+
   @GetMapping("/{customerId}/orders")
   public List<OrderResponse> getOrdersForCustomer(@PathVariable Integer customerId) {
     List<Order> orders = orderService.getOrdersForCustomer(customerId);

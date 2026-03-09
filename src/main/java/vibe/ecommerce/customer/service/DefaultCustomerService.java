@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import vibe.ecommerce.customer.domain.Customer;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 
+import java.util.List;
+
 @Service
 public class DefaultCustomerService implements CustomerService {
 
@@ -23,5 +25,10 @@ public class DefaultCustomerService implements CustomerService {
   @Override
   public Customer getCustomer(Integer id) {
     return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+  }
+
+  @Override
+  public List<Customer> getCustomers() {
+    return repo.findAll();
   }
 }

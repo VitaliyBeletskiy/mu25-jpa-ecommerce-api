@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import vibe.ecommerce.customer.domain.Customer;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -30,5 +31,10 @@ public class CustomerRepositoryJpaAdapter implements CustomerRepository {
   @Override
   public Optional<Customer> findById(Integer id) {
     return jpaRepo.findById(id).map(CustomerEntityMapper::toDomain);
+  }
+
+  @Override
+  public List<Customer> findAll() {
+    return jpaRepo.findAll().stream().map(CustomerEntityMapper::toDomain).toList();
   }
 }

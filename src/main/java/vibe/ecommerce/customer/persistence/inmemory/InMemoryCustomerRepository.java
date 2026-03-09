@@ -6,6 +6,7 @@ import vibe.ecommerce.customer.domain.CustomerRepository;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,5 +28,10 @@ public class InMemoryCustomerRepository implements CustomerRepository {
   @Override
   public Optional<Customer> findById(Integer id) {
     return Optional.ofNullable(storage.get(id));
+  }
+
+  @Override
+  public List<Customer> findAll() {
+    return storage.values().stream().toList();
   }
 }
