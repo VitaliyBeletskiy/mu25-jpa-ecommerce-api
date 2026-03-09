@@ -1,6 +1,7 @@
 package vibe.ecommerce.product.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vibe.ecommerce.product.domain.Product;
 import vibe.ecommerce.product.domain.ProductRepository;
 
@@ -16,6 +17,7 @@ public class DefaultProductService implements ProductService {
     this.repo = productRepository;
   }
 
+  @Transactional
   @Override
   public Product createProduct(String name, BigDecimal price) {
     return repo.save(new Product(null, name, price, null));

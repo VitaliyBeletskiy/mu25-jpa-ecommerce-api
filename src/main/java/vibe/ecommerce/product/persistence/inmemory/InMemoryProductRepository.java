@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class InMemoryProductRepository implements ProductRepository {
 
   private final Map<Integer, Product> storage = new HashMap<>();

@@ -12,12 +12,12 @@ import java.util.Optional;
 @Repository
 public class CustomerRepositoryJpaAdapter implements CustomerRepository {
 
-  private final CustomerJpaRepository jpaRepo;
+  private final JpaCustomerRepository jpaRepo;
 
   @PersistenceContext private EntityManager entityManager;
 
-  public CustomerRepositoryJpaAdapter(CustomerJpaRepository customerJpaRepository) {
-    this.jpaRepo = customerJpaRepository;
+  public CustomerRepositoryJpaAdapter(JpaCustomerRepository jpaCustomerRepository) {
+    this.jpaRepo = jpaCustomerRepository;
   }
 
   @Override
