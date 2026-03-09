@@ -1,5 +1,6 @@
 package vibe.ecommerce.order.persistence.inmemory;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 import vibe.ecommerce.order.domain.Order;
 import vibe.ecommerce.order.domain.OrderItem;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
+@ConditionalOnProperty(name = "app.persistence.mode", havingValue = "inmemory")
 public class InMemoryOrderRepository implements OrderRepository {
 
   private final Map<Integer, Order> orders = new HashMap<>();
@@ -62,7 +64,8 @@ public class InMemoryOrderRepository implements OrderRepository {
     Payment saved = new Payment(payment.orderId(), payment.amount(), payment.method(), now);
     payments.put(payment.orderId(), saved);
     Order order = orders.get(payment.orderId());
-    Order paidOrder = new Order(order.id(), order.customerId(), OrderStatus.PAID, order.createdAt());
+    Order paidOrder =
+        new Order(order.id(), order.customerId(), OrderStatus.PAID, order.createdAt());
     orders.put(order.id(), paidOrder);
     return saved;
   }

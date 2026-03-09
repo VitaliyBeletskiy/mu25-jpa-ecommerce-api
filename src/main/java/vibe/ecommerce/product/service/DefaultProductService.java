@@ -23,11 +23,13 @@ public class DefaultProductService implements ProductService {
     return repo.save(new Product(null, name, price, null));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public Product getProduct(Integer id) {
     return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<Product> getProducts() {
     return repo.findAll();

@@ -6,13 +6,11 @@ import vibe.ecommerce.order.domain.OrderItem;
 import vibe.ecommerce.order.domain.Payment;
 import vibe.ecommerce.order.domain.PaymentMethod;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
-  Order createOrder(Integer customerId);
 
-  Order getOrder(Integer id);
+  Order createOrder(Integer customerId);
 
   OrderDetails getOrderDetails(Integer id);
 

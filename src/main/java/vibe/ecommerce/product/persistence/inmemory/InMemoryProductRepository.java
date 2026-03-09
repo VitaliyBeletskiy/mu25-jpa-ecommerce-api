@@ -1,5 +1,6 @@
 package vibe.ecommerce.product.persistence.inmemory;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 import vibe.ecommerce.product.domain.Product;
 import vibe.ecommerce.product.domain.ProductRepository;
@@ -10,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-//@Repository
+@Repository
+@ConditionalOnProperty(name = "app.persistence.mode", havingValue = "inmemory")
 public class InMemoryProductRepository implements ProductRepository {
 
   private final Map<Integer, Product> storage = new HashMap<>();

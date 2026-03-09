@@ -2,6 +2,7 @@ package vibe.ecommerce.product.persistence.jpa;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 import vibe.ecommerce.product.domain.Product;
 import vibe.ecommerce.product.domain.ProductRepository;
@@ -10,14 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@ConditionalOnProperty(name = "app.persistence.mode", havingValue = "jpa", matchIfMissing = true)
 public class ProductRepositoryJpaAdapter implements ProductRepository {
 
-  private final JpaProductRepository jpaRepo;
+  private final ProductJpaRepository jpaRepo;
 
   @PersistenceContext private EntityManager entityManager;
 
-  public ProductRepositoryJpaAdapter(JpaProductRepository jpaProductRepository) {
-    this.jpaRepo = jpaProductRepository;
+  public ProductRepositoryJpaAdapter(ProductJpaRepository productJpaRepository) {
+    this.jpaRepo = productJpaRepository;
   }
 
   @Override

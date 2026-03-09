@@ -1,6 +1,7 @@
 package vibe.ecommerce.order.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 import vibe.ecommerce.order.domain.Order;
 import vibe.ecommerce.order.domain.OrderDetails;
@@ -31,6 +32,7 @@ public class DefaultOrderService implements OrderService {
     this.productRepo = productRepo;
   }
 
+  @Transactional
   @Override
   public Order createOrder(Integer customerId) {
     customerRepo
@@ -39,24 +41,17 @@ public class DefaultOrderService implements OrderService {
     return orderRepo.save(new Order(null, customerId, OrderStatus.NEW, null));
   }
 
-  @Override
-  public Order getOrder(Integer id) {
-    return orderRepo
-        .findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Order not found"));
-  }
-
+  @Transactional(readOnly = true)
   @Override
   public OrderDetails getOrderDetails(Integer id) {
     Order order =
-        orderRepo
-            .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        orderRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Order not found"));
     List<OrderItem> orderItems = orderRepo.findOrderItems(id);
     Payment payment = orderRepo.findPaymentByOrderId(id).orElse(null);
     return new OrderDetails(order, orderItems, payment);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<Order> getOrdersForCustomer(Integer customerId) {
     customerRepo
@@ -65,11 +60,10 @@ public class DefaultOrderService implements OrderService {
     return orderRepo.findByCustomerId(customerId);
   }
 
+  @Transactional
   @Override
   public OrderItem addOrderItem(Integer orderId, Integer productId, Integer quantity) {
-    orderRepo
-        .findById(orderId)
-        .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    orderRepo.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
     Product product =
         productRepo
             .findById(productId)
@@ -77,14 +71,14 @@ public class DefaultOrderService implements OrderService {
     return orderRepo.saveOrderItem(new OrderItem(orderId, productId, quantity, product.price()));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<OrderItem> getOrderItems(Integer orderId) {
-    orderRepo
-        .findById(orderId)
-        .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    orderRepo.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
     return orderRepo.findOrderItems(orderId);
   }
 
+  @Transactional
   @Override
   public Payment payOrder(Integer orderId, PaymentMethod paymentMethod) {
     Order order =

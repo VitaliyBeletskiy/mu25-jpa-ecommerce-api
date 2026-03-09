@@ -22,11 +22,13 @@ public class DefaultCustomerService implements CustomerService {
     return repo.save(new Customer(fullName, email));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public Customer getCustomer(Integer id) {
     return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<Customer> getCustomers() {
     return repo.findAll();
