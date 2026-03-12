@@ -10,9 +10,11 @@ import vibe.ecommerce.order.domain.Order;
 import vibe.ecommerce.order.domain.OrderItem;
 import vibe.ecommerce.order.domain.OrderRepository;
 import vibe.ecommerce.order.domain.Payment;
+import vibe.ecommerce.order.domain.PaymentMethod;
 import vibe.ecommerce.product.persistence.jpa.ProductEntity;
 import vibe.ecommerce.product.persistence.jpa.ProductJpaRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,27 +65,26 @@ public class OrderRepositoryJpaAdapter implements OrderRepository {
   }
 
   @Override
-  public OrderItem saveOrderItem(OrderItem orderItem) {
-    OrderEntity order = orderJpaRepo.findById(orderItem.orderId()).orElseThrow();
-    ProductEntity product = productJpaRepo.findById(orderItem.productId()).orElseThrow();
-    OrderItemEntity entity =
-        new OrderItemEntity(order, product, orderItem.quantity(), orderItem.unitPrice());
+  public OrderItem addItem(Integer orderId, Integer productId, Integer quantity, BigDecimal unitPrice) {
+    OrderEntity order = orderJpaRepo.findById(orderId).orElseThrow();
+    ProductEntity product = productJpaRepo.findById(productId).orElseThrow();
+    OrderItemEntity entity = new OrderItemEntity(order, product, quantity, unitPrice);
     OrderItemEntity saved = orderItemJpaRepo.save(entity);
     //    entityManager.refresh(saved);  - not needed since we don't have DEFAULT CURRENT_TIMESTAMP
     return OrderItemEntityMapper.toDomain(saved);
   }
 
   @Override
-  public List<OrderItem> findOrderItems(Integer orderId) {
+  public List<OrderItem> findItems(Integer orderId) {
     return orderItemJpaRepo.findByOrder_Id(orderId).stream()
         .map(OrderItemEntityMapper::toDomain)
         .toList();
   }
 
   @Override
-  public Payment savePayment(Payment payment) {
-    OrderEntity order = orderJpaRepo.findById(payment.orderId()).orElseThrow();
-    PaymentEntity entity = new PaymentEntity(order, payment.amount(), payment.method());
+  public Payment savePayment(Integer orderId, BigDecimal amount, PaymentMethod method) {
+    OrderEntity order = orderJpaRepo.findById(orderId).orElseThrow();
+    PaymentEntity entity = new PaymentEntity(order, amount, method);
     PaymentEntity saved = paymentJpaRepo.saveAndFlush(entity);
     entityManager.refresh(saved);
     order.markPaid();
@@ -91,7 +92,7 @@ public class OrderRepositoryJpaAdapter implements OrderRepository {
   }
 
   @Override
-  public Optional<Payment> findPaymentByOrderId(Integer orderId) {
+  public Optional<Payment> findPayment(Integer orderId) {
     return paymentJpaRepo.findByOrder_Id(orderId).map(PaymentEntityMapper::toDomain);
   }
 }

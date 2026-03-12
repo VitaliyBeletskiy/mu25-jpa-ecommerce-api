@@ -46,8 +46,8 @@ public class DefaultOrderService implements OrderService {
   public OrderDetails getOrderDetails(Integer id) {
     Order order =
         orderRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Order not found"));
-    List<OrderItem> orderItems = orderRepo.findOrderItems(id);
-    Payment payment = orderRepo.findPaymentByOrderId(id).orElse(null);
+    List<OrderItem> orderItems = orderRepo.findItems(id);
+    Payment payment = orderRepo.findPayment(id).orElse(null);
     return new OrderDetails(order, orderItems, payment);
   }
 
@@ -62,20 +62,19 @@ public class DefaultOrderService implements OrderService {
 
   @Transactional
   @Override
-  public OrderItem addOrderItem(Integer orderId, Integer productId, Integer quantity) {
-    orderRepo.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
+  public OrderItem addOrderItem(AddOrderItemCommand cmd) {
     Product product =
         productRepo
-            .findById(productId)
+            .findById(cmd.productId())
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-    return orderRepo.saveOrderItem(new OrderItem(orderId, productId, quantity, product.price()));
+    return orderRepo.addItem(cmd.orderId(), cmd.productId(), cmd.quantity(), product.price());
   }
 
   @Transactional(readOnly = true)
   @Override
   public List<OrderItem> getOrderItems(Integer orderId) {
     orderRepo.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
-    return orderRepo.findOrderItems(orderId);
+    return orderRepo.findItems(orderId);
   }
 
   @Transactional
@@ -88,7 +87,7 @@ public class DefaultOrderService implements OrderService {
     if (order.status() != OrderStatus.NEW) {
       throw new IllegalStateException("Only NEW orders can be paid");
     }
-    List<OrderItem> items = orderRepo.findOrderItems(orderId);
+    List<OrderItem> items = orderRepo.findItems(orderId);
     if (items.isEmpty()) {
       throw new IllegalStateException("Cannot pay for order without items");
     }
@@ -97,6 +96,6 @@ public class DefaultOrderService implements OrderService {
             .map(oi -> oi.unitPrice().multiply(BigDecimal.valueOf(oi.quantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    return orderRepo.savePayment(new Payment(orderId, total, paymentMethod, null));
+    return orderRepo.savePayment(orderId, total, paymentMethod);
   }
 }

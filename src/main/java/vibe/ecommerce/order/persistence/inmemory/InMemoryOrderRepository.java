@@ -7,7 +7,9 @@ import vibe.ecommerce.order.domain.OrderItem;
 import vibe.ecommerce.order.domain.OrderRepository;
 import vibe.ecommerce.order.domain.OrderStatus;
 import vibe.ecommerce.order.domain.Payment;
+import vibe.ecommerce.order.domain.PaymentMethod;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -47,23 +49,24 @@ public class InMemoryOrderRepository implements OrderRepository {
   }
 
   @Override
-  public OrderItem saveOrderItem(OrderItem orderItem) {
-    OrderItemKey key = new OrderItemKey(orderItem.orderId(), orderItem.productId());
-    orderItems.put(key, orderItem);
+  public OrderItem addItem(Integer orderId, Integer productId, Integer quantity, BigDecimal unitPrice) {
+    OrderItemKey key = new OrderItemKey(orderId, productId);
+    OrderItem orderItem = new  OrderItem(orderId, productId, quantity, unitPrice);
+    orderItems.put(key, new  OrderItem(orderId, productId, quantity, unitPrice));
     return orderItem;
   }
 
   @Override
-  public List<OrderItem> findOrderItems(Integer orderId) {
+  public List<OrderItem> findItems(Integer orderId) {
     return orderItems.values().stream().filter(oi -> oi.orderId().equals(orderId)).toList();
   }
 
   @Override
-  public Payment savePayment(Payment payment) {
+  public Payment savePayment(Integer orderId, BigDecimal amount, PaymentMethod method) {
     Instant now = Instant.now();
-    Payment saved = new Payment(payment.orderId(), payment.amount(), payment.method(), now);
-    payments.put(payment.orderId(), saved);
-    Order order = orders.get(payment.orderId());
+    Payment saved = new Payment(orderId, amount, method, now);
+    payments.put(orderId, saved);
+    Order order = orders.get(orderId);
     Order paidOrder =
         new Order(order.id(), order.customerId(), OrderStatus.PAID, order.createdAt());
     orders.put(order.id(), paidOrder);
@@ -71,7 +74,7 @@ public class InMemoryOrderRepository implements OrderRepository {
   }
 
   @Override
-  public Optional<Payment> findPaymentByOrderId(Integer orderId) {
+  public Optional<Payment> findPayment(Integer orderId) {
     return Optional.ofNullable(payments.get(orderId));
   }
 }

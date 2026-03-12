@@ -15,6 +15,7 @@ import vibe.ecommerce.order.api.dto.OrderMapper;
 import vibe.ecommerce.order.api.dto.OrderResponse;
 import vibe.ecommerce.order.api.dto.PayOrderRequest;
 import vibe.ecommerce.order.api.dto.PaymentResponse;
+import vibe.ecommerce.order.service.AddOrderItemCommand;
 import vibe.ecommerce.order.domain.Order;
 import vibe.ecommerce.order.domain.OrderDetails;
 import vibe.ecommerce.order.domain.OrderItem;
@@ -48,7 +49,9 @@ public class OrderController {
   @PostMapping("/{orderId}/items")
   public OrderItemResponse addOrderItem(
       @PathVariable Integer orderId, @RequestBody @Valid AddOrderItemRequest request) {
-    OrderItem orderItem = service.addOrderItem(orderId, request.productId(), request.quantity());
+    OrderItem orderItem =
+        service.addOrderItem(
+            new AddOrderItemCommand(orderId, request.productId(), request.quantity()));
     return OrderMapper.toOrderItemResponse(orderItem);
   }
 

@@ -16,7 +16,7 @@ public interface OrderService {
 
   List<Order> getOrdersForCustomer(Integer customerId);
 
-  OrderItem addOrderItem(Integer orderId, Integer productId, Integer quantity);
+  OrderItem addOrderItem(AddOrderItemCommand cmd);
 
   List<OrderItem> getOrderItems(Integer orderId);
 
