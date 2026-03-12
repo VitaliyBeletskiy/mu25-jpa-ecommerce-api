@@ -1,5 +1,8 @@
 # E-Commerce API
 
+> ⚠️ **This is a learning project.**  
+> Developed as part of the course module *Backend-programmering i Java och SpringBoot* with focus on JPA.
+
 Minimal REST API for managing products, customers, and orders.\
 Built with Spring Boot, following layered architecture principles and
 repository abstraction (supports both InMemory and JPA implementations).
