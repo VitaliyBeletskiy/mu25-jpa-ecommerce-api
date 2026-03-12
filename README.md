@@ -16,48 +16,33 @@ repository abstraction (supports both InMemory and JPA implementations).
 
 ------------------------------------------------------------------------
 
-## Domain Overview
+## Domain Model
 
-The system supports:
+The database schema is illustrated below.
 
--   Customers
--   Products
--   Orders
--   Order Items
--   Payments
+![Database diagram](docs/dbdiagram.png)
 
-Relationships:
-
--   Customer **1 → many** Orders\
--   Order **many → many** Products (via OrderItem)\
--   Order **1 → 1** Payment
+Interactive version available at:  
+https://dbdiagram.io/d/Minimal-e-commerce-69a6e840a3f0aa31e1aa3d0f
 
 ------------------------------------------------------------------------
 
 ## API Endpoints
 
-### Products
--   `POST   /products`  CreateProductRequest -> ProductResponse
--   `GET    /products`
--   `GET    /products/{id}`
-
-### Customers
--   `POST   /customers` CreateCustomerRequest -> CustomerResponse
--   `GET    /customers`
--   `GET    /customers/{id}`
-
-### Orders
--   `POST   /orders`  CreateOrderRequest -> OrderResponse
--   `GET    /orders/{id}` ... -> OrderDetailsResponse
--   `GET    /customers/{customerId}/orders`
-
-### Order Items
--   `POST   /orders/{orderId}/items`   AddOrderItemRequest -> OrderItemResponse
--   `GET    /orders/{orderId}/items`
--   `DELETE /orders/{orderId}/items/{productId}`
-
-### Payments
--   `POST   /orders/{orderId}/pay`  PayOrderRequest -> PaymentResponse
+| Method | Path | Request DTO | Response DTO |
+|---|---|---|---|
+| `POST` | `/customers` | `CreateCustomerRequest` | `CustomerResponse` |
+| `GET` | `/customers/{id}` | — | `CustomerResponse` |
+| `GET` | `/customers` | — | `List<CustomerResponse>` |
+| `GET` | `/customers/{customerId}/orders` | — | `List<OrderResponse>` |
+| `POST` | `/products` | `CreateProductRequest` | `ProductResponse` |
+| `GET` | `/products/{id}` | — | `ProductResponse` |
+| `GET` | `/products` | — | `List<ProductResponse>` |
+| `POST` | `/orders` | `CreateOrderRequest` | `OrderResponse` |
+| `GET` | `/orders/{id}` | — | `OrderDetailsResponse` |
+| `POST` | `/orders/{orderId}/items` | `AddOrderItemRequest` | `OrderItemResponse` |
+| `GET` | `/orders/{orderId}/items` | — | `List<OrderItemResponse>` |
+| `POST` | `/orders/{orderId}/pay` | `PayOrderRequest` | `PaymentResponse` |
 
 ------------------------------------------------------------------------
 
