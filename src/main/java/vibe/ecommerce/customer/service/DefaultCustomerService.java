@@ -2,6 +2,7 @@ package vibe.ecommerce.customer.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vibe.ecommerce.common.error.CustomerNotFoundException;
 import vibe.ecommerce.customer.domain.Customer;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 
@@ -25,7 +26,7 @@ public class DefaultCustomerService implements CustomerService {
   @Transactional(readOnly = true)
   @Override
   public Customer getCustomer(Integer id) {
-    return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+    return repo.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
   }
 
   @Transactional(readOnly = true)

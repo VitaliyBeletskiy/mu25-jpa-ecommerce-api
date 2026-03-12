@@ -2,6 +2,7 @@ package vibe.ecommerce.product.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vibe.ecommerce.common.error.ProductNotFoundException;
 import vibe.ecommerce.product.domain.Product;
 import vibe.ecommerce.product.domain.ProductRepository;
 
@@ -26,7 +27,7 @@ public class DefaultProductService implements ProductService {
   @Transactional(readOnly = true)
   @Override
   public Product getProduct(Integer id) {
-    return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    return repo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
   }
 
   @Transactional(readOnly = true)

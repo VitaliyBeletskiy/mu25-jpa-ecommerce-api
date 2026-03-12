@@ -2,6 +2,11 @@ package vibe.ecommerce.order.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vibe.ecommerce.common.error.CustomerNotFoundException;
+import vibe.ecommerce.common.error.OrderCannotBePaidException;
+import vibe.ecommerce.common.error.OrderHasNoItemsException;
+import vibe.ecommerce.common.error.OrderNotFoundException;
+import vibe.ecommerce.common.error.ProductNotFoundException;
 import vibe.ecommerce.customer.domain.CustomerRepository;
 import vibe.ecommerce.order.domain.Order;
 import vibe.ecommerce.order.domain.OrderDetails;
@@ -35,17 +40,14 @@ public class DefaultOrderService implements OrderService {
   @Transactional
   @Override
   public Order createOrder(Integer customerId) {
-    customerRepo
-        .findById(customerId)
-        .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+    customerRepo.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId));
     return orderRepo.save(new Order(null, customerId, OrderStatus.NEW, null));
   }
 
   @Transactional(readOnly = true)
   @Override
   public OrderDetails getOrderDetails(Integer id) {
-    Order order =
-        orderRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    Order order = orderRepo.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     List<OrderItem> orderItems = orderRepo.findItems(id);
     Payment payment = orderRepo.findPayment(id).orElse(null);
     return new OrderDetails(order, orderItems, payment);
@@ -54,9 +56,7 @@ public class DefaultOrderService implements OrderService {
   @Transactional(readOnly = true)
   @Override
   public List<Order> getOrdersForCustomer(Integer customerId) {
-    customerRepo
-        .findById(customerId)
-        .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+    customerRepo.findById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId));
     return orderRepo.findByCustomerId(customerId);
   }
 
@@ -66,14 +66,14 @@ public class DefaultOrderService implements OrderService {
     Product product =
         productRepo
             .findById(cmd.productId())
-            .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+            .orElseThrow(() -> new ProductNotFoundException(cmd.productId()));
     return orderRepo.addItem(cmd.orderId(), cmd.productId(), cmd.quantity(), product.price());
   }
 
   @Transactional(readOnly = true)
   @Override
   public List<OrderItem> getOrderItems(Integer orderId) {
-    orderRepo.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    orderRepo.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
     return orderRepo.findItems(orderId);
   }
 
@@ -81,15 +81,13 @@ public class DefaultOrderService implements OrderService {
   @Override
   public Payment payOrder(Integer orderId, PaymentMethod paymentMethod) {
     Order order =
-        orderRepo
-            .findById(orderId)
-            .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        orderRepo.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
     if (order.status() != OrderStatus.NEW) {
-      throw new IllegalStateException("Only NEW orders can be paid");
+      throw new OrderCannotBePaidException(orderId);
     }
     List<OrderItem> items = orderRepo.findItems(orderId);
     if (items.isEmpty()) {
-      throw new IllegalStateException("Cannot pay for order without items");
+      throw new OrderHasNoItemsException(orderId);
     }
     BigDecimal total =
         items.stream()
