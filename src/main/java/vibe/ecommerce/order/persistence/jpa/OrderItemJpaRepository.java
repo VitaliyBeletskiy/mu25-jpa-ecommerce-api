@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface OrderItemJpaRepository extends JpaRepository<OrderItemEntity, OrderItemId> {
   List<OrderItemEntity> findByOrder_Id(Integer orderId);
+
+  boolean existsByProduct_Id(Integer productId);
 }

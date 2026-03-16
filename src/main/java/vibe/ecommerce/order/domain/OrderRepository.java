@@ -19,4 +19,6 @@ public interface OrderRepository {
   Payment savePayment(Integer orderId, BigDecimal amount, PaymentMethod method);
 
   Optional<Payment> findPayment(Integer orderId);
+
+  boolean existsByProductId(Integer productId);
 }

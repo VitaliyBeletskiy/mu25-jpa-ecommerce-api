@@ -13,4 +13,6 @@ public interface ProductService {
   List<Product> getProducts();
 
   Product updateProduct(Integer id, String name, BigDecimal price);
+
+  void deleteProduct(Integer id);
 }

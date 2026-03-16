@@ -2,6 +2,7 @@ package vibe.ecommerce.product.api;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,7 @@ public class ProductController {
     return ProductMapper.toResponse(product);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{productId}")
   public ProductResponse getProduct(@PathVariable Integer productId) {
     Product product = service.getProduct(productId);
     return ProductMapper.toResponse(product);
@@ -51,5 +52,11 @@ public class ProductController {
       @PathVariable Integer productId, @RequestBody @Valid UpsertProductRequest request) {
     Product product = service.updateProduct(productId, request.name(), request.price());
     return ProductMapper.toResponse(product);
+  }
+
+  @DeleteMapping("/{productId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteProduct(@PathVariable Integer productId) {
+    service.deleteProduct(productId);
   }
 }

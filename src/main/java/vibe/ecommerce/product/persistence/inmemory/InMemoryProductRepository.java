@@ -36,4 +36,9 @@ public class InMemoryProductRepository implements ProductRepository {
   public List<Product> findAll() {
     return storage.values().stream().toList();
   }
+
+  @Override
+  public void delete(Integer id) {
+    storage.remove(id);
+  }
 }

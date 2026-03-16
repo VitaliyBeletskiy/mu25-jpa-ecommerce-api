@@ -2,7 +2,9 @@ package vibe.ecommerce.product.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vibe.ecommerce.common.error.ProductIsUsedException;
 import vibe.ecommerce.common.error.ProductNotFoundException;
+import vibe.ecommerce.order.domain.OrderRepository;
 import vibe.ecommerce.product.domain.Product;
 import vibe.ecommerce.product.domain.ProductRepository;
 
@@ -12,34 +14,47 @@ import java.util.List;
 @Service
 public class DefaultProductService implements ProductService {
 
-  private final ProductRepository repo;
+  private final ProductRepository productRepo;
+  private final OrderRepository orderRepo;
 
-  public DefaultProductService(ProductRepository productRepository) {
-    this.repo = productRepository;
+  public DefaultProductService(
+      final ProductRepository productRepository, final OrderRepository orderRepo) {
+    this.productRepo = productRepository;
+    this.orderRepo = orderRepo;
   }
 
   @Transactional
   @Override
   public Product createProduct(String name, BigDecimal price) {
-    return repo.save(new Product(null, name, price, null));
+    return productRepo.save(new Product(null, name, price, null));
   }
 
   @Transactional(readOnly = true)
   @Override
   public Product getProduct(Integer id) {
-    return repo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    return productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
   }
 
   @Transactional(readOnly = true)
   @Override
   public List<Product> getProducts() {
-    return repo.findAll();
+    return productRepo.findAll();
   }
 
   @Transactional
   @Override
   public Product updateProduct(Integer id, String name, BigDecimal price) {
-    repo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
-    return repo.save(new Product(id, name, price));
+    productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    return productRepo.save(new Product(id, name, price));
+  }
+
+  @Transactional
+  @Override
+  public void deleteProduct(Integer id) {
+    productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    if (orderRepo.existsByProductId(id)) {
+      throw new ProductIsUsedException(id);
+    }
+    productRepo.delete(id);
   }
 }

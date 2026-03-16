@@ -65,7 +65,8 @@ public class OrderRepositoryJpaAdapter implements OrderRepository {
   }
 
   @Override
-  public OrderItem addItem(Integer orderId, Integer productId, Integer quantity, BigDecimal unitPrice) {
+  public OrderItem addItem(
+      Integer orderId, Integer productId, Integer quantity, BigDecimal unitPrice) {
     OrderEntity order = orderJpaRepo.findById(orderId).orElseThrow();
     ProductEntity product = productJpaRepo.findById(productId).orElseThrow();
     OrderItemEntity entity = new OrderItemEntity(order, product, quantity, unitPrice);
@@ -94,5 +95,10 @@ public class OrderRepositoryJpaAdapter implements OrderRepository {
   @Override
   public Optional<Payment> findPayment(Integer orderId) {
     return paymentJpaRepo.findByOrder_Id(orderId).map(PaymentEntityMapper::toDomain);
+  }
+
+  @Override
+  public boolean existsByProductId(Integer productId) {
+    return orderItemJpaRepo.existsByProduct_Id(productId);
   }
 }

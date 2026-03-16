@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handle(OrderHasNoItemsException e) {
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(e.getMessage());
   }
+
+  @ExceptionHandler(ProductIsUsedException.class)
+  public ResponseEntity<String> handle(ProductIsUsedException e) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+  }
 }

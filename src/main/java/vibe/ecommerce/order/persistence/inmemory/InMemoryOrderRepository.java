@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -49,10 +50,11 @@ public class InMemoryOrderRepository implements OrderRepository {
   }
 
   @Override
-  public OrderItem addItem(Integer orderId, Integer productId, Integer quantity, BigDecimal unitPrice) {
+  public OrderItem addItem(
+      Integer orderId, Integer productId, Integer quantity, BigDecimal unitPrice) {
     OrderItemKey key = new OrderItemKey(orderId, productId);
-    OrderItem orderItem = new  OrderItem(orderId, productId, quantity, unitPrice);
-    orderItems.put(key, new  OrderItem(orderId, productId, quantity, unitPrice));
+    OrderItem orderItem = new OrderItem(orderId, productId, quantity, unitPrice);
+    orderItems.put(key, new OrderItem(orderId, productId, quantity, unitPrice));
     return orderItem;
   }
 
@@ -76,5 +78,10 @@ public class InMemoryOrderRepository implements OrderRepository {
   @Override
   public Optional<Payment> findPayment(Integer orderId) {
     return Optional.ofNullable(payments.get(orderId));
+  }
+
+  @Override
+  public boolean existsByProductId(Integer productId) {
+    return orderItems.keySet().stream().anyMatch(k -> Objects.equals(k.productId(), productId));
   }
 }
