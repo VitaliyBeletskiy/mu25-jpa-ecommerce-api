@@ -10,4 +10,6 @@ public interface CustomerRepository {
   Optional<Customer> findById(Integer id);
 
   List<Customer> findAll();
+
+  void delete(Integer id);
 }

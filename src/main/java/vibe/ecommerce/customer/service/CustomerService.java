@@ -12,4 +12,6 @@ public interface CustomerService {
   List<Customer> getCustomers();
 
   Customer updateCustomer(Integer id, String fullName, String email);
+
+  void deleteCustomer(Integer id);
 }

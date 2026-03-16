@@ -39,4 +39,9 @@ public class CustomerRepositoryJpaAdapter implements CustomerRepository {
   public List<Customer> findAll() {
     return jpaRepo.findAll().stream().map(CustomerEntityMapper::toDomain).toList();
   }
+
+  @Override
+  public void delete(Integer id) {
+    jpaRepo.deleteById(id);
+  }
 }

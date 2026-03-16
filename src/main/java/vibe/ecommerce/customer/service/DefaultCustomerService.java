@@ -41,4 +41,11 @@ public class DefaultCustomerService implements CustomerService {
     repo.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
     return repo.save(new Customer(id, fullName, email));
   }
+
+  @Transactional
+  @Override
+  public void deleteCustomer(Integer id) {
+    repo.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
+    repo.delete(id);
+  }
 }

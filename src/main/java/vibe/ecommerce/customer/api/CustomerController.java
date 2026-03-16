@@ -2,6 +2,7 @@ package vibe.ecommerce.customer.api;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,9 +43,9 @@ public class CustomerController {
     return CustomerMapper.toResponse(customer);
   }
 
-  @GetMapping("/{id}")
-  public CustomerResponse getCustomer(@PathVariable Integer id) {
-    Customer customer = customerService.getCustomer(id);
+  @GetMapping("/{customerId}")
+  public CustomerResponse getCustomer(@PathVariable Integer customerId) {
+    Customer customer = customerService.getCustomer(customerId);
     return CustomerMapper.toResponse(customer);
   }
 
@@ -66,5 +67,11 @@ public class CustomerController {
     Customer customer =
         customerService.updateCustomer(customerId, request.fullName(), request.email());
     return CustomerMapper.toResponse(customer);
+  }
+
+  @DeleteMapping("/{customerId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteCustomer(@PathVariable Integer customerId) {
+    customerService.deleteCustomer(customerId);
   }
 }
