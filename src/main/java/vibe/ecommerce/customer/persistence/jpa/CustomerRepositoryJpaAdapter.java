@@ -25,7 +25,7 @@ public class CustomerRepositoryJpaAdapter implements CustomerRepository {
   @Override
   public Customer save(Customer customer) {
     CustomerEntity entity = CustomerEntityMapper.toEntity(customer);
-    CustomerEntity saved = jpaRepo.save(entity);
+    CustomerEntity saved = jpaRepo.saveAndFlush(entity);
     entityManager.refresh(saved);
     return CustomerEntityMapper.toDomain(saved);
   }

@@ -7,7 +7,8 @@ public class CustomerEntityMapper {
   private CustomerEntityMapper() {}
 
   public static CustomerEntity toEntity(Customer customer) {
-    return new CustomerEntity(customer.fullName(), customer.email());
+    return new CustomerEntity(
+        customer.id(), customer.fullName(), customer.email(), customer.createdAt());
   }
 
   public static Customer toDomain(CustomerEntity customerEntity) {

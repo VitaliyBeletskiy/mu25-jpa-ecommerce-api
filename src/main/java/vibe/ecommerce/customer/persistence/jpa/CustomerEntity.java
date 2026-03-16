@@ -29,8 +29,10 @@ public class CustomerEntity {
 
   protected CustomerEntity() {}
 
-  public CustomerEntity(String fullName, String email) {
+  public CustomerEntity(Integer id, String fullName, String email, Instant createdAt) {
+    this.id = id;
     this.fullName = fullName;
     this.email = email;
+    this.createdAt = createdAt;
   }
 }

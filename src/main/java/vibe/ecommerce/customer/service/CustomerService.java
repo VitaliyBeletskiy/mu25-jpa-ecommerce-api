@@ -10,4 +10,6 @@ public interface CustomerService {
   Customer getCustomer(Integer id);
 
   List<Customer> getCustomers();
+
+  Customer updateCustomer(Integer id, String fullName, String email);
 }

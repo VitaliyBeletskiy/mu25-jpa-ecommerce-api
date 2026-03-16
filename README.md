@@ -33,18 +33,19 @@ https://dbdiagram.io/d/Minimal-e-commerce-69a6e840a3f0aa31e1aa3d0f
 ## API Endpoints
 
 | Method | Path | Request DTO | Response DTO |
-|---|---|---|---|
-| `POST` | `/customers` | `CreateCustomerRequest` | `CustomerResponse` |
-| `GET` | `/customers/{id}` | — | `CustomerResponse` |
-| `GET` | `/customers` | — | `List<CustomerResponse>` |
-| `GET` | `/customers/{customerId}/orders` | — | `List<OrderResponse>` |
+|--------|---|---|---|
+| `POST` | `/customers` | `UpsertCustomerRequest` | `CustomerResponse` |
+| `GET`  | `/customers/{id}` | — | `CustomerResponse` |
+| `GET`  | `/customers` | — | `List<CustomerResponse>` |
+| `PUT`  | `/customers/{id}` | `UpsertCustomerRequest` | `CustomerResponse` |
+| `GET`  | `/customers/{customerId}/orders` | — | `List<OrderResponse>` |
 | `POST` | `/products` | `CreateProductRequest` | `ProductResponse` |
-| `GET` | `/products/{id}` | — | `ProductResponse` |
-| `GET` | `/products` | — | `List<ProductResponse>` |
+| `GET`  | `/products/{id}` | — | `ProductResponse` |
+| `GET`  | `/products` | — | `List<ProductResponse>` |
 | `POST` | `/orders` | `CreateOrderRequest` | `OrderResponse` |
-| `GET` | `/orders/{id}` | — | `OrderDetailsResponse` |
+| `GET`  | `/orders/{id}` | — | `OrderDetailsResponse` |
 | `POST` | `/orders/{orderId}/items` | `AddOrderItemRequest` | `OrderItemResponse` |
-| `GET` | `/orders/{orderId}/items` | — | `List<OrderItemResponse>` |
+| `GET`  | `/orders/{orderId}/items` | — | `List<OrderItemResponse>` |
 | `POST` | `/orders/{orderId}/pay` | `PayOrderRequest` | `PaymentResponse` |
 
 ------------------------------------------------------------------------

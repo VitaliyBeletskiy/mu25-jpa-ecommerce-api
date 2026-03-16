@@ -34,4 +34,11 @@ public class DefaultCustomerService implements CustomerService {
   public List<Customer> getCustomers() {
     return repo.findAll();
   }
+
+  @Transactional
+  @Override
+  public Customer updateCustomer(Integer id, String fullName, String email) {
+    repo.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
+    return repo.save(new Customer(id, fullName, email));
+  }
 }

@@ -6,4 +6,8 @@ public record Customer(Integer id, String fullName, String email, Instant create
   public Customer(String fullName, String email) {
     this(null, fullName, email, null);
   }
+
+  public Customer(Integer id, String fullName, String email) {
+    this(id, fullName, email, null);
+  }
 }

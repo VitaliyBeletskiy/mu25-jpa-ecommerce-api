@@ -1,13 +1,16 @@
 package vibe.ecommerce.customer.api;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import vibe.ecommerce.customer.api.dto.CreateCustomerRequest;
+import vibe.ecommerce.customer.api.dto.UpsertCustomerRequest;
 import vibe.ecommerce.customer.api.dto.CustomerMapper;
 import vibe.ecommerce.customer.api.dto.CustomerResponse;
 import vibe.ecommerce.customer.domain.Customer;
@@ -33,7 +36,8 @@ public class CustomerController {
   }
 
   @PostMapping
-  public CustomerResponse createCustomer(@RequestBody @Valid CreateCustomerRequest request) {
+  @ResponseStatus(HttpStatus.CREATED)
+  public CustomerResponse createCustomer(@RequestBody @Valid UpsertCustomerRequest request) {
     Customer customer = customerService.createCustomer(request.fullName(), request.email());
     return CustomerMapper.toResponse(customer);
   }
@@ -54,5 +58,13 @@ public class CustomerController {
   public List<OrderResponse> getOrdersForCustomer(@PathVariable Integer customerId) {
     List<Order> orders = orderService.getOrdersForCustomer(customerId);
     return orders.stream().map(OrderMapper::toOrderResponse).toList();
+  }
+
+  @PutMapping("/{customerId}")
+  public CustomerResponse updateCustomer(
+      @PathVariable Integer customerId, @RequestBody @Valid UpsertCustomerRequest request) {
+    Customer customer =
+        customerService.updateCustomer(customerId, request.fullName(), request.email());
+    return CustomerMapper.toResponse(customer);
   }
 }
