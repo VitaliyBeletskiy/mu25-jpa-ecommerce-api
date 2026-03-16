@@ -11,4 +11,6 @@ public interface ProductService {
   Product getProduct(Integer id);
 
   List<Product> getProducts();
+
+  Product updateProduct(Integer id, String name, BigDecimal price);
 }

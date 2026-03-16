@@ -30,8 +30,10 @@ public class ProductEntity {
 
   protected ProductEntity() {}
 
-  public ProductEntity(String name, BigDecimal price) {
+  public ProductEntity(Integer id, String name, BigDecimal price, Instant createdAt) {
+    this.id = id;
     this.name = name;
     this.price = price;
+    this.createdAt = createdAt;
   }
 }

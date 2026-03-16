@@ -25,7 +25,7 @@ public class ProductRepositoryJpaAdapter implements ProductRepository {
   @Override
   public Product save(Product product) {
     ProductEntity entity = ProductEntityMapper.toEntity(product);
-    ProductEntity saved = jpaRepo.save(entity);
+    ProductEntity saved = jpaRepo.saveAndFlush(entity);
     entityManager.refresh(saved);
     return ProductEntityMapper.toDomain(saved);
   }

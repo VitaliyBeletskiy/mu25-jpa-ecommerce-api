@@ -35,4 +35,11 @@ public class DefaultProductService implements ProductService {
   public List<Product> getProducts() {
     return repo.findAll();
   }
+
+  @Transactional
+  @Override
+  public Product updateProduct(Integer id, String name, BigDecimal price) {
+    repo.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    return repo.save(new Product(id, name, price));
+  }
 }

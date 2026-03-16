@@ -7,7 +7,7 @@ public class ProductEntityMapper {
   private ProductEntityMapper() {}
 
   public static ProductEntity toEntity(Product product) {
-    return new ProductEntity(product.name(), product.price());
+    return new ProductEntity(product.id(), product.name(), product.price(), product.createdAt());
   }
 
   public static Product toDomain(ProductEntity productEntity) {
