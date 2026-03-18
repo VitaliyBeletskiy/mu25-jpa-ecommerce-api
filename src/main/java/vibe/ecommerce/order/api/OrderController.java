@@ -1,11 +1,14 @@
 package vibe.ecommerce.order.api;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import vibe.ecommerce.order.api.dto.AddOrderItemRequest;
 import vibe.ecommerce.order.api.dto.CreateOrderRequest;
@@ -35,6 +38,7 @@ public class OrderController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public OrderResponse createOrder(@RequestBody @Valid CreateOrderRequest request) {
     Order order = service.createOrder(request.customerId());
     return OrderMapper.toOrderResponse(order);
@@ -59,6 +63,12 @@ public class OrderController {
   public List<OrderItemResponse> getOrderItems(@PathVariable Integer orderId) {
     List<OrderItem> orderItems = service.getOrderItems(orderId);
     return orderItems.stream().map(OrderMapper::toOrderItemResponse).toList();
+  }
+
+  @PatchMapping("/{orderId}/cancel")
+  public OrderResponse cancelOrder(@PathVariable Integer orderId) {
+    Order order = service.cancelOrder(orderId);
+    return OrderMapper.toOrderResponse(order);
   }
 
   @PostMapping("/{orderId}/pay")

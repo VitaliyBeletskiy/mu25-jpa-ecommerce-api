@@ -32,24 +32,25 @@ https://dbdiagram.io/d/Minimal-e-commerce-69a6e840a3f0aa31e1aa3d0f
 
 ## API Endpoints
 
-| Method   | Path | Request DTO             | Response DTO              |
-|----------|---|-------------------------|---------------------------|
-| `POST`   | `/customers` | `UpsertCustomerRequest` | `CustomerResponse`        |
-| `GET`    | `/customers/{id}` | —                       | `CustomerResponse`        |
-| `GET`    | `/customers` | —                       | `List<CustomerResponse>`  |
-| `PUT`    | `/customers/{id}` | `UpsertCustomerRequest` | `CustomerResponse`        |
-| `DELETE` | `/customers/{id}` | —                       | —                         |
+| Method   | Path                             | Request DTO             | Response DTO              |
+|----------|----------------------------------|-------------------------|---------------------------|
+| `POST`   | `/customers`                     | `UpsertCustomerRequest` | `CustomerResponse`        |
+| `GET`    | `/customers/{id}`                | —                       | `CustomerResponse`        |
+| `GET`    | `/customers`                     | —                       | `List<CustomerResponse>`  |
+| `PUT`    | `/customers/{id}`                | `UpsertCustomerRequest` | `CustomerResponse`        |
+| `DELETE` | `/customers/{id}`                | —                       | —                         |
 | `GET`    | `/customers/{customerId}/orders` | —                       | `List<OrderResponse>`     |
-| `POST`   | `/products` | `UpsertProductRequest`  | `ProductResponse`         |
-| `GET`    | `/products/{id}` | —                       | `ProductResponse`         |
-| `GET`    | `/products` | —                       | `List<ProductResponse>`   |
-| `PUT`    | `/products/{id}` | `UpsertProductRequest`  | `ProductResponse`         |
-| `DELETE` | `/products/{id}` | —                       | —                         |
-| `POST`   | `/orders` | `CreateOrderRequest`    | `OrderResponse`           |
-| `GET`    | `/orders/{id}` | —                       | `OrderDetailsResponse`    |
-| `POST`   | `/orders/{orderId}/items` | `AddOrderItemRequest`   | `OrderItemResponse`       |
-| `GET`    | `/orders/{orderId}/items` | —                       | `List<OrderItemResponse>` |
-| `POST`   | `/orders/{orderId}/pay` | `PayOrderRequest`       | `PaymentResponse`         |
+| `POST`   | `/products`                      | `UpsertProductRequest`  | `ProductResponse`         |
+| `GET`    | `/products/{id}`                 | —                       | `ProductResponse`         |
+| `GET`    | `/products`                      | —                       | `List<ProductResponse>`   |
+| `PUT`    | `/products/{id}`                 | `UpsertProductRequest`  | `ProductResponse`         |
+| `DELETE` | `/products/{id}`                 | —                       | —                         |
+| `POST`   | `/orders`                        | `CreateOrderRequest`    | `OrderResponse`           |
+| `GET`    | `/orders/{id}`                   | —                       | `OrderDetailsResponse`    |
+| `POST`   | `/orders/{orderId}/items`        | `AddOrderItemRequest`   | `OrderItemResponse`       |
+| `GET`    | `/orders/{orderId}/items`        | —                       | `List<OrderItemResponse>` |
+| `PATCH`  | `/orders/{orderId}/cancel`       | —                       | `OrderResponse`           |
+| `POST`   | `/orders/{orderId}/pay`          | `PayOrderRequest`       | `PaymentResponse`         |
 
 ------------------------------------------------------------------------
 

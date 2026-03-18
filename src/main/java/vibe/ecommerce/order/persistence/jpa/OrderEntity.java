@@ -37,9 +37,11 @@ public class OrderEntity {
 
   protected OrderEntity() {}
 
-  public OrderEntity(CustomerEntity customer, OrderStatus status) {
+  public OrderEntity(Integer id, CustomerEntity customer, OrderStatus status, Instant createdAt) {
+    this.id = id;
     this.customer = customer;
     this.status = status;
+    this.createdAt = createdAt;
   }
 
   public void markPaid() {

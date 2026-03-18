@@ -79,6 +79,15 @@ public class DefaultOrderService implements OrderService {
 
   @Transactional
   @Override
+  public Order cancelOrder(Integer orderId) {
+    Order order =
+        orderRepo.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+    Order cancelled = order.cancel();
+    return orderRepo.save(cancelled);
+  }
+
+  @Transactional
+  @Override
   public Payment payOrder(Integer orderId, PaymentMethod paymentMethod) {
     Order order =
         orderRepo.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));

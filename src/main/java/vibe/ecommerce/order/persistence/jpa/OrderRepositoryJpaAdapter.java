@@ -46,7 +46,7 @@ public class OrderRepositoryJpaAdapter implements OrderRepository {
   @Override
   public Order save(Order order) {
     CustomerEntity customer = customerJpaRepo.findById(order.customerId()).orElseThrow();
-    OrderEntity entity = new OrderEntity(customer, order.status());
+    OrderEntity entity = new OrderEntity(order.id(), customer, order.status(), order.createdAt());
     OrderEntity saved = orderJpaRepo.saveAndFlush(entity);
     entityManager.refresh(saved);
     return OrderEntityMapper.toDomain(saved);

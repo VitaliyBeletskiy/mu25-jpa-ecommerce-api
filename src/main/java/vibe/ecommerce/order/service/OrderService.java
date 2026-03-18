@@ -20,5 +20,7 @@ public interface OrderService {
 
   List<OrderItem> getOrderItems(Integer orderId);
 
+  Order cancelOrder(Integer orderId);
+
   Payment payOrder(Integer orderId, PaymentMethod paymentMethod);
 }

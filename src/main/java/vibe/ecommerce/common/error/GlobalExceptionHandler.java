@@ -37,4 +37,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handle(ProductIsUsedException e) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
   }
+
+  @ExceptionHandler(OrderCannotBeCancelledException.class)
+  public ResponseEntity<String> handle(OrderCannotBeCancelledException e) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+  }
 }
