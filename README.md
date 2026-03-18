@@ -28,6 +28,10 @@ The database schema is illustrated below.
 Interactive version available at:  
 https://dbdiagram.io/d/Minimal-e-commerce-69a6e840a3f0aa31e1aa3d0f
 
+The SQL schema used to create the database is available here:
+[db/schema.sql](db/schema.sql)\
+This file contains the DDL statements defining all tables, relationships, and constraints for the application.
+
 ------------------------------------------------------------------------
 
 ## API Endpoints
